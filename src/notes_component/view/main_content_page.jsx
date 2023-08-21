@@ -3,10 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import NoteCard from '../widgets/note_card';
 import useNotesStore from '../stateManagementStores/notesStore';
+import useSidebarStore from '../../global/useSidebarStore';
 
 const MainContent = () => {
   const { notes, fetchNotes, deleteNote } = useNotesStore();
   const [currentPage, setCurrentPage] = useState(1);
+  const { isOpen } = useSidebarStore()
+
 
   useEffect(() => {
     fetchNotes();
@@ -44,7 +47,7 @@ const MainContent = () => {
   };
 
   return (
-    <div className="col-span-11 justify-center p-4  relative">
+    <div className={`sm:col-span-11 ${isOpen ? 'col-span-10' : 'col-span-12'} justify-center p-4  relative overflow-y-auto h-screen custom-scrollbar`}>
       <h2 className="text-lg font-bold mb-4 w-full border-b-2 text-dark-blue font-serif">Your Notes</h2>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
         {getPageNotes(currentPage).map((note) => (
