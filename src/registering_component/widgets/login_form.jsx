@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import REACT_APP_API_URL from '../../../env';
 
 function LoginForm({ setIsLogin }) {
 
@@ -33,7 +34,7 @@ function LoginForm({ setIsLogin }) {
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/reg/login', {
+      const response = await axios.post(`${REACT_APP_API_URL}/reg/login`, {
         email,
         password,
       });
@@ -47,7 +48,7 @@ function LoginForm({ setIsLogin }) {
         if (location.pathname == '/') {
           location.reload()
         }
-        else { navigate('/', { state: { from: location }, replace: true, relative: "route" }); }
+        else { navigate('/', { state: { from: location.pathname }, replace: true, }); }
       } else {
         setErrorMessage('Invalid credentials');
       }
@@ -64,6 +65,10 @@ function LoginForm({ setIsLogin }) {
       }
     })
   }
+
+
+
+
 
   return (
     <div className='bg-white rounded-xl p-4 shadow-lg    mx-auto   w-96 h-1/2 my-auto   z-30' id='login-form'>

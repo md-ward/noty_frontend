@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useFetcher, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import NotesPage from "./notes_component/view/notes_page";
 import Register from "./registering_component/view/registering_page";
 
@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 
 const AppRouter = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
 
   useEffect(() => {
@@ -49,11 +49,12 @@ const AppRouter = () => {
       <Route path="*" element={<ErrorPage />} />
 
       <Route path="/" element={
-        isLoggedIn ? (
+        isLoggedIn ?
           <NotesPage />
-        ) : (
-          <Register />
-        )
+          :
+          <Navigate to='/register' replace={true} />
+        // <Register />
+
       } />
     </Routes>
   );

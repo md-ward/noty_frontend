@@ -9,14 +9,14 @@ const SideBar = () => {
 
 
     return (
-        <div className={`z-40 sm:w-24 rounded-tr-md rounded-br-md duration-300 ease-in-out   ${openMenu ? 'h-52' : 'h-12'} shadow-md sm:min-h-screen rounded-lg fixed right-2 top-3 sm:top-0 sm:left-0 bg-indigo-300`}>
+        <div className={`min-h-screen col-span-1 rounded-tr-md rounded-br-md  bg-indigo-300`}>
             <FontAwesomeIcon
                 onClick={() => setOpenMenu(!openMenu)}
                 icon={faBurger} size='2xl' className=' text-white p-2 sm:hidden' />
             <ul className={` flex flex-col justify-start  sm:items-center text-center  gap-10 sm:mt-36  sm:block ${openMenu ? '' : 'hidden'}`}>
                 <li className="mb-4 relative text-white group">
                     {/* <FontAwesomeIcon className='cursor-pointer' icon={faStickyNote} size="lg" /> */}
-                    <img src="/assets/icons/sticky1.svg"  className=' round object-scale-down w-10 mx-auto' />
+                    <img src="/assets/icons/sticky1.svg" className=' round object-scale-down w-10 mx-auto' />
                     <h2 className="absolute w-28 hidden duration-300 ease-in-out z-40 left-24 top-0 rounded-full text-center group-hover:block bg-dark-blue bg-opacity-80 text-white">
                         Notes
                     </h2>

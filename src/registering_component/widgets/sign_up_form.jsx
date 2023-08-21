@@ -5,7 +5,10 @@ import { gsap } from 'gsap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 function SignUpForm({ setIsLogin }) {
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -61,8 +64,9 @@ function SignUpForm({ setIsLogin }) {
                 });
 
                 console.log(response);
-                seterrorState(true);
-
+                localStorage.setItem('token', response.data['token'])
+                localStorage.setItem('name', response.data['name'])
+                navigate('/', { state: { from: location.pathname }, replace: true, relative: "route" });
 
 
             } catch (error) {
