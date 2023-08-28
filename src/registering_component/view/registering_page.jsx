@@ -82,7 +82,7 @@ function Register() {
 
   return (
 
-    <div className='min-h-screen w-full flex flex-row relative'>
+    <div className='min-h-screen w-full flex flex-row relative font-sans'>
       {/* background */}
       <img src={background} className='w-full fixed inset-0 h-full object-cover blur-sm z-0' />
       {!isLogin ? <span

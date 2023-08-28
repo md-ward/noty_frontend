@@ -2,7 +2,7 @@ import { gsap } from 'gsap';
 import { useRef, useEffect, useState } from 'react';
 import { Power3 } from 'gsap/all';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faHashtag } from '@fortawesome/free-solid-svg-icons';
 import useNotesStore from '../stateManagementStores/notesStore';
 const NewNoteDialog = ({ setisNewNoteOpen }) => {
   const dialogRef = useRef(null);
@@ -13,6 +13,8 @@ const NewNoteDialog = ({ setisNewNoteOpen }) => {
   const [noteColor, setNoteColor] = useState('#34D399');
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
+  const [AddTag, setAddTag] = useState(false);
+  const [tags, settags] = useState([]);
 
   const defaultColorsMap = [
     '#EF4444',
@@ -64,13 +66,18 @@ const NewNoteDialog = ({ setisNewNoteOpen }) => {
     }
   };
 
+
+
   return (
     <div
       ref={dialogRef}
       className={`fixed max-sm:my-5 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2   w-80 sm:w-96 h-96 p-2  rounded-lg  ring-1 ring-black`}
       style={{ backgroundColor: noteColor }}
     >
-      <h2 className="text-white text-center text-2xl font-bold mb-4">New Note</h2>
+      <span className='flex justify-around items-baseline'>
+        <h2 className="text-white text-center text-2xl font-bold mb-4">New Note</h2>
+        <FontAwesomeIcon icon={faHashtag} size='lg' color='white'   className='cursor-pointer rounded-full ' />
+      </span>
       <form className="flex flex-col items-center justify-center">
         <input
           type="text"
@@ -126,7 +133,7 @@ const NewNoteDialog = ({ setisNewNoteOpen }) => {
             size="xl"
           />
           <span
-className="absolute  bg-dark-blue w-8   aspect-square rounded-full  -z-0"
+            className="absolute  bg-dark-blue w-8   aspect-square rounded-full  -z-0"
             id="btn"
           ></span>
         </span>

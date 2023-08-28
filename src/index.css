@@ -2,6 +2,49 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* fonts  */
+
+@font-face {
+  font-family: 'Quicksand';
+  src: url('/assets/fonts/Quicksand-VariableFont_wght.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Bombing';
+  src: url('/assets/fonts/Bombing.ttf');
+
+}
+
+@font-face {
+  font-family: 'Dyna';
+  src: url('/assets/fonts/DynaPuff-VariableFont_wdth,wght.ttf');
+
+}
+
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/assets/fonts/Poppins-Regular.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('/assets/fonts/Montserrat-VariableFont_wght.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+/* CSS */
+.title_scroll::-webkit-scrollbar {
+
+  display: none !important;
+}
 
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;

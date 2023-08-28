@@ -19,7 +19,11 @@ const NoteCard = ({ note }) => {
 
 
   const handleDeleteNote = () => {
-    deleteNote(_id);
+    if (window.confirm('want to delete this note ...?')
+    ) {
+
+      deleteNote(_id);
+    }
   };
 
   const handleOpenDialog = () => {
@@ -31,9 +35,9 @@ const NoteCard = ({ note }) => {
   };
 
   return (
-    <div className="h-72 rounded-lg shadow-lg bg-white">
+    <div className="h-72  w-80 sm:w-full place-self-center rounded-lg shadow-lg bg-white">
       <div className="h-8  rounded-t-lg" style={{ backgroundColor: noteColor }}>
-        <div className="font-bold text-xl text-center mb-2 overflow-x-auto text-white">
+        <div className="font-bold text-xl text-center mb-2 overflow-x-auto text-white title_scroll ">
           {title}
         </div>
       </div>
@@ -41,7 +45,7 @@ const NoteCard = ({ note }) => {
         <p className="text-gray-700 text-base ">{text}</p>
       </div>
       <div className=" rounded-b-lg p-2 flex justify-around  items-center" style={{ backgroundColor: noteColor }} >
-        <h1>{formattedDate}</h1>
+        <h1 className='text-white'>{formattedDate}</h1>
         <span className='flex items-center'>
           <img src="/assets/icons/icons8-delete.svg" className="h-9 cursor-pointer" onClick={handleDeleteNote} />
           <img src="/assets/icons/icons8-expand-96.png" className="h-6 cursor-pointer" onClick={handleOpenDialog} />
