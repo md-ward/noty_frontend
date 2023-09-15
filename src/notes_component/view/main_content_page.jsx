@@ -52,7 +52,7 @@ const MainContent = () => {
       className={` sm:col-span-11 ${isOpen ? 'col-span-10' : 'col-span-12'} justify-center p-1 sm:p-4  relative overflow-y-auto h-screen custom-scrollbar`}>
       <h2
         className="text-lg sm:text-xl  font-bold mb-4 w-full text-center  border-b-2 text-dark-blue ">Your Notes</h2>
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-10">
         {getPageNotes(currentPage).map((note) => (
           <NoteCard key={note._id} note={note} onDeleteNote={handleDeleteNote} />
         ))}

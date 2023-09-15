@@ -7,6 +7,25 @@ import {
 } from '../controller/notes_contorllers';
 
 const useNotesStore = create((set) => ({
+
+    noteColor: '#34D399',
+    setNoteColor: (state) => { set({ noteColor: state }) },
+
+    title: '',
+    setTitle: (state) => { set({ title: state }) },
+
+    text: '',
+    setText: (state) => { set({ text: state }) },
+
+    AddTag: false,
+    setAddTag: (state) => { set({ AddTag: state }) },
+    tags: [],
+    setTags: (state) => { set({ tags: state }) }
+    ,
+    tagInput: '',
+    setTagInput: (state) => { set({ tagInput: state }) },
+
+
     notes: [],
     fetchNotes: async () => {
         try {

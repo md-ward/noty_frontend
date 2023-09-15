@@ -34,7 +34,7 @@ const NotesPage = () => {
       </span> */}
 
 
-      {isNewNoteOpen && <NewNoteDialog setisNewNoteOpen={setisNewNoteOpen} ></NewNoteDialog>
+      {isNewNoteOpen && <NewNoteDialog setisNewNoteOpen={setisNewNoteOpen}  isNewNoteOpen={isNewNoteOpen}></NewNoteDialog>
       }
     </div>
   );

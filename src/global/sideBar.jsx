@@ -13,6 +13,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
     const [handleSettingChange, sethandleSettingChange] = useState(false);
     const [changeThemAndFont, setchangeThemAndFont] = useState('');
 
+    const { logout } = useAuth();
 
     const [appTheme, setappTheme] = useState();
 
@@ -38,10 +39,9 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
     }, []);
 
     const handleLogout = () => {
-        const { logout } = useAuth();
         if (window.confirm('want to logout ?')) {
             logout()
-            // navigate('/register', { replace: true });
+            navigate('/register', { replace: true });
         }
     };
 
@@ -112,6 +112,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
 
         >
 
+            {/* <img src="/assets/logo-no-background.svg" alt="noty logo" className='w-32 h-32  p-2 max-sm:hidden' /> */}
             {/* Menu toggle button */}
             <FontAwesomeIcon
                 onClick={toggleSidebar}
