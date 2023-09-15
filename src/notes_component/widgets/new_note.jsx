@@ -19,6 +19,7 @@ const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
     '#3B82F6'
   ];
 
+  // ! animation 
   useEffect(() => {
     const tl = gsap.timeline({ paused: true });
     tl.fromTo(
@@ -80,7 +81,7 @@ const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
   };
   const handleAddTag = () => {
     if (tagInput.trim() !== '') {
-      setTags((prevTags) => [...prevTags, tagInput.trim()]);
+      setTags(tagInput);
       setTagInput('');
     }
   };

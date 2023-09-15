@@ -1,21 +1,24 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStickyNote, faCheckSquare, faBars, faPlus, faExternalLinkAlt, faArrowLeft, faPalette, faFont } from '@fortawesome/free-solid-svg-icons';
-import React, { useLayoutEffect, useState } from 'react';
+import { faCheckSquare, faBars, faPlus, faExternalLinkAlt, faArrowLeft, faFont, faSearch, faClose } from '@fortawesome/free-solid-svg-icons';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSidebarStore from './useSidebarStore';
 
 import { gsap } from 'gsap';
 import FontSettings from './widgets/font_settings';
-import ThemeSelector from './widgets/theme_selector';
 import useAuth from '../useAuth';
+import useNotesStore from '../notes_component/stateManagementStores/notesStore';
 const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
     const { isOpen, toggleSidebar, openSidebar, closeSidebar } = useSidebarStore();
     const [handleSettingChange, sethandleSettingChange] = useState(false);
     const [changeThemAndFont, setchangeThemAndFont] = useState('');
+    const { setShowSearchInput, showSearchInput } = useNotesStore();
 
     const { logout } = useAuth();
 
-    const [appTheme, setappTheme] = useState();
+
+    const searchIconRef = useRef(null);
+
 
     const navigate = useNavigate();
 
@@ -46,6 +49,24 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
     };
 
 
+
+    function handleSearchToggle() {
+        setShowSearchInput(!showSearchInput);
+      
+        // GSAP animation to rotate search icon
+        const timeline = gsap.timeline();
+        if (showSearchInput) {
+          timeline.to(searchIconRef.current, {
+            rotation: 0,
+            duration: 0.2,
+          });
+        } else {
+          timeline.to(searchIconRef.current, {
+            rotation: 180,
+            duration: 0.2,
+          });
+        }
+      }
 
     function handleSettingsToggle() {
         const timeline = gsap.timeline();
@@ -94,14 +115,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
     // ! buttons style 
     const iconsStyles = 'relative flex items-center justify-center rounded-full w-10 h-10 bg-white bg-opacity-50 text-indigo-900 shadow-md hover:bg-opacity-75  duration-200 ease-in-out cursor-pointer';
 
-    // ? app theme ......
-    function onSelectTheme(theme) {
 
-        setappTheme(theme['primaryColor'])
-        document.body.style.backgroundColor = appTheme;
-
-
-    }
 
     return (
         <div
@@ -131,9 +145,15 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
                 id="menue_items"
             >
                 {/* Sticky Note icon */}
-                <div className={iconsStyles}>
+
+                <div className={iconsStyles}
+                    onClick={handleSearchToggle}
+                    ref={searchIconRef}
+
+                >
                     <FontAwesomeIcon
-                        icon={faStickyNote}
+
+                        icon={!showSearchInput?faSearch:faClose}
                         size="lg"
                         className="text-indigo-900"
                     />
