@@ -9,7 +9,7 @@ const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
   const dialogRef = useRef(null);
   const colorsRef = useRef(null);
 
-  const { addNote, noteColor, setNoteColor, title, setTitle, text, setText, AddTag, setAddTag, tags, setTags, tagInput, setTagInput } = useNotesStore();
+  const { addNote, noteColor, setNoteColor, title, setTitle, text, setText } = useNotesStore();
 
 
   const defaultColorsMap = [
@@ -45,7 +45,6 @@ const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
       setTitle(oldNoteData.title || '');
       setText(oldNoteData.text || '');
       setNoteColor(oldNoteData.noteColor || '#34D399');
-      setTags(oldNoteData.tags || []);
     }
   }, [isNoteUpdate, oldNoteData]);
 
@@ -56,7 +55,7 @@ const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
         title,
         text,
         noteColor: noteColor,
-        tags,
+
       };
 
       if (isNoteUpdate && oldNoteData) {
@@ -72,23 +71,15 @@ const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
       setTitle('');
       setText('');
       setNoteColor('#34D399');
-      setTags([]);
       setisNewNoteOpen(false);
     } catch (error) {
       console.error(error);
       // Handle error
     }
   };
-  const handleAddTag = () => {
-    if (tagInput.trim() !== '') {
-      setTags(tagInput);
-      setTagInput('');
-    }
-  };
 
-  const handleRemoveTag = (index) => {
-    setTags((prevTags) => prevTags.filter((_, i) => i !== index));
-  };
+
+
 
 
 
@@ -100,7 +91,6 @@ const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
     >
       <span className='flex justify-around items-baseline'>
         <h2 className="text-white text-center text-2xl font-bold mb-4">New Note</h2>
-        <FontAwesomeIcon icon={faHashtag} size='lg' color='white' className='cursor-pointer rounded-full' bounce onClick={() => setAddTag(!AddTag)} />
       </span>
       <form className="flex flex-col items-center justify-center">
         <input
@@ -117,42 +107,6 @@ const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
           value={text}
           onChange={(e) => setText(e.target.value)}
         ></textarea>
-        {AddTag && (
-          <div className="relative w-full " >
-            <input
-              type="text"
-              placeholder="Tags"
-              className="w-full rounded-lg py-2 px-4 mb-4"
-              value={tagInput}
-              onChange={(e) => setTagInput(e.target.value)}
-            />
-            <FontAwesomeIcon
-              icon={faPlus}
-              size='lg'
-              className='text-gray-400 absolute top-3 hover:text-gray-600 right-4 cursor-pointer'
-              onClick={handleAddTag}
-            />
-          </div>
-        )}
-
-        {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {tags.map((tag, index) => (
-              <span
-                key={index}
-                className="group bg-white px-2 py-1 rounded-lg text-gray-700 text-sm select-none cursor-pointer duration-200 ease-in-out transition-all"
-              >
-                {tag}
-                <button
-                  className="hidden group-hover:inline-block  bg-white rounded-full  w-4 h-4 text-center text-gray-500 hover:text-red-500"
-                  onClick={() => handleRemoveTag(index)}
-                >
-                  &times;
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
 
       </form>
 

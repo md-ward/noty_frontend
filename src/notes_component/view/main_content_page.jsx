@@ -5,9 +5,10 @@ import { gsap } from 'gsap';
 import NoteCard from '../widgets/note_card';
 import useNotesStore from '../stateManagementStores/notesStore';
 import useSidebarStore from '../../global/useSidebarStore';
+import { searchNotes } from '../controller/notes_contorllers';
 
 const MainContent = () => {
-  const { notes, fetchNotes, deleteNote, currentPage, totalPages, setCurrentPage, showSearchInput, setSearchQuery, searchQuery } = useNotesStore();
+  const { notes, fetchNotes, deleteNote, currentPage, totalPages, setCurrentPage, showSearchInput, setSearchQuery, searchQuery, fetchSearchNotes } = useNotesStore();
   const { isOpen } = useSidebarStore();
   const searchInputRef = useRef(null);
 
@@ -40,6 +41,8 @@ const MainContent = () => {
 
   const handleSearchInputChange = (event) => {
     setSearchQuery(event.target.value);
+
+    fetchSearchNotes()
   };
 
   const handleSearch = async () => {
@@ -109,7 +112,7 @@ const MainContent = () => {
       </span>
 
 
-      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 ">
         {notes.map((note) => (
           <NoteCard key={note._id} note={note} onDeleteNote={handleDeleteNote} />
         ))}

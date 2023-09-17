@@ -92,18 +92,7 @@ const NoteCard = ({ note }) => {
             <img src="/assets/icons/icons8-expand-96.png" className="h-6 cursor-pointer" onClick={handleOpenDialog} />
           </span>
         </span>
-        {tags && tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 p-2">
-            {tags.map((tag, index) => (
-              <span
-                key={index}
-                className="bg-white px-2 py-1 rounded-lg text-gray-700 text-sm"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+
       </div>
       {showDialog && (
         <NoteDialog noteColor={noteColor} title={title} text={text} onClose={handleCloseDialog} />
