@@ -5,7 +5,6 @@ import { gsap } from 'gsap';
 import NoteCard from '../widgets/note_card';
 import useNotesStore from '../stateManagementStores/notesStore';
 import useSidebarStore from '../../global/useSidebarStore';
-import { searchNotes } from '../controller/notes_contorllers';
 
 const MainContent = () => {
   const { notes, fetchNotes, deleteNote, currentPage, totalPages, setCurrentPage, showSearchInput, setSearchQuery, searchQuery, fetchSearchNotes } = useNotesStore();
@@ -19,6 +18,7 @@ const MainContent = () => {
   const handleDeleteNote = async (noteId) => {
     try {
       await deleteNote(noteId);
+      fetchNotes();
     } catch (error) {
       console.error(error);
       // Handle error display or other actions
@@ -43,28 +43,9 @@ const MainContent = () => {
     setSearchQuery(event.target.value);
 
     fetchSearchNotes()
+
   };
 
-  const handleSearch = async () => {
-    if (searchQuery.trim() !== '') {
-      // Perform search logic
-      try {
-        const { notesList, currentPage, totalPages, totalItems } = await searchNotes(searchQuery);
-        set({
-          notes: notesList,
-          currentPage,
-          totalPages,
-          totalItems,
-        });
-      } catch (error) {
-        console.error(error);
-        // Handle error display or other actions
-      }
-    } else {
-      // If search query is empty, fetch all notes
-      fetchNotes();
-    }
-  };
 
 
   // ? search animation........
@@ -75,14 +56,18 @@ const MainContent = () => {
     if (showSearchInput) {
       gsap.to(searchInputRef.current, {
         width: '350',
+        opacity: 1,
         duration: animationDuration,
       });
     } else {
       gsap.to(searchInputRef.current, {
         width: 0,
+        opacity: 0,
         duration: animationDuration,
         onComplete: () => {
+          searchInputRef.current.value = ''
           setSearchQuery('');
+          fetchNotes()
           searchInputRef.current.classList.add('hidden'); // Add the "hidden" class when animation is complete
         },
       });

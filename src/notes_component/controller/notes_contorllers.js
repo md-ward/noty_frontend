@@ -1,6 +1,7 @@
 import axios from 'axios';
 import REACT_APP_API_URL from '../../../env';
 
+
 // Retrieve all notes with pagination
 async function getAllNotes(page = 1, limit = 8) {
   try {

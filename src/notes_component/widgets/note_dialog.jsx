@@ -25,7 +25,7 @@ const NoteDialog = ({ noteColor, title, text, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 mx-auto my-auto flex items-center justify-center z-50  sm:w-1/2  " >
+        <div className="fixed inset-0 mx-auto my-auto flex items-center justify-center z-50  sm:w-1/2  whitespace-break-spaces" >
             <div className="bg-white  shadow-lg p-6 rounded-lg w-full  " ref={NoteDialogRef} style={{ backgroundColor: noteColor }}>
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-bold h-8 w-full text-center text-white rounded-lg" >{title}</h2>

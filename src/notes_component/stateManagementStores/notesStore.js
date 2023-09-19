@@ -18,12 +18,7 @@ const useNotesStore = create((set) => ({
   text: '',
   setText: (state) => set({ text: state }),
 
-  // AddTag: false,
-  // setAddTag: (state) => set({ AddTag: state }),
-  // tags: [],
-  // setTags: (state) => set((prevState) => ({ tags: [...prevState.tags, state] })),
-  // tagInput: '',
-  // setTagInput: (state) => set({ tagInput: state }),
+
 
   //? Notes and pagination
   notes: [],
@@ -81,10 +76,12 @@ const useNotesStore = create((set) => ({
     try {
       // Add note logic
       const addedNote = await addNoteAPI(newNote);
-      set((state) => ({
-        notes: [...state.notes, addedNote],
-        totalItems: state.totalItems + 1, // Increment totalItems by 1
-      }));
+      await useNotesStore.getState().fetchNotes()
+
+      // set((state) => ({
+      //   notes: [...state.notes, addedNote],
+      //   totalItems: state.totalItems + 1, // Increment totalItems by 1
+      // }));
     } catch (error) {
       console.error(error);
       // Handle error display or other actions
@@ -95,10 +92,11 @@ const useNotesStore = create((set) => ({
     try {
       // Delete note logic
       await deleteNoteAPI(noteId);
-      set((state) => ({
-        notes: state.notes.filter((note) => note._id !== noteId),
-        totalItems: state.totalItems - 1, // Decrement totalItems by 1
-      }));
+      // set((state) => ({
+      //   notes: state.notes.filter((note) => note._id !== noteId),
+      //   totalItems: state.totalItems - 1, // Decrement totalItems by 1
+      // }));
+      await useNotesStore.getState().fetchNotes()
     } catch (error) {
       console.error(error);
       // Handle error display or other actions

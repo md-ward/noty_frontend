@@ -9,19 +9,23 @@ import FontSettings from './widgets/font_settings';
 import useAuth from '../useAuth';
 import useNotesStore from '../notes_component/stateManagementStores/notesStore';
 const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
+
+
     const { isOpen, toggleSidebar, openSidebar, closeSidebar } = useSidebarStore();
     const [handleSettingChange, sethandleSettingChange] = useState(false);
     const [changeThemAndFont, setchangeThemAndFont] = useState('');
     const { setShowSearchInput, showSearchInput } = useNotesStore();
 
-    const { logout } = useAuth();
-
-
     const searchIconRef = useRef(null);
 
 
-    const navigate = useNavigate();
+    // !custom hook for authentecation 
 
+    const { logout } = useAuth();
+
+
+    const navigate = useNavigate();
+    // ! handle closing the sideBar on screen resizing ......
     useLayoutEffect(() => {
         const handleResize = () => {
             if (window.innerWidth > 600 && isOpen) {
@@ -41,6 +45,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
         };
     }, []);
 
+    // ! log out from account...........
     const handleLogout = () => {
         if (window.confirm('want to logout ?')) {
             logout()
@@ -49,24 +54,25 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
     };
 
 
-
+    // ! open and close the search bar /
     function handleSearchToggle() {
         setShowSearchInput(!showSearchInput);
-      
+
         // GSAP animation to rotate search icon
         const timeline = gsap.timeline();
         if (showSearchInput) {
-          timeline.to(searchIconRef.current, {
-            rotation: 0,
-            duration: 0.2,
-          });
+            timeline.to(searchIconRef.current, {
+                rotation: 0,
+                duration: 0.2,
+            });
         } else {
-          timeline.to(searchIconRef.current, {
-            rotation: 180,
-            duration: 0.2,
-          });
+            timeline.to(searchIconRef.current, {
+                rotation: 180,
+                duration: 0.2,
+            });
         }
-      }
+    }
+    //! the init animation for settings 
 
     function handleSettingsToggle() {
         const timeline = gsap.timeline();
@@ -86,6 +92,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
             });
     }
 
+    // ! the back animation for the settings ...
     function handleBackToggle() {
         const timeline = gsap.timeline();
         timeline
@@ -103,7 +110,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
                 duration: 0.3,
             });
     }
-
+    // ! to change the font type ......
 
     function handleChangeingThemeAndFontBack() {
 
@@ -144,7 +151,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
                     }`}
                 id="menue_items"
             >
-                {/* Sticky Note icon */}
+                {/* Search  icon */}
 
                 <div className={iconsStyles}
                     onClick={handleSearchToggle}
@@ -153,7 +160,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
                 >
                     <FontAwesomeIcon
 
-                        icon={!showSearchInput?faSearch:faClose}
+                        icon={!showSearchInput ? faSearch : faClose}
                         size="lg"
                         className="text-indigo-900"
                     />
