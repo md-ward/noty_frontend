@@ -1,3 +1,4 @@
+import React from 'react';
 import { create } from 'zustand';
 import {
   getAllNotes,
@@ -18,8 +19,6 @@ const useNotesStore = create((set) => ({
   text: '',
   setText: (state) => set({ text: state }),
 
-
-
   //? Notes and pagination
   notes: [],
   currentPage: 1,
@@ -32,6 +31,9 @@ const useNotesStore = create((set) => ({
   searchQuery: '',
   setSearchQuery: (state) => set({ searchQuery: state }),
 
+  error: null,
+  setError: (error) => set({ error }),
+
   fetchNotes: async () => {
     try {
       const { notesList, currentPage, totalPages, totalItems } = await getAllNotes(
@@ -42,10 +44,11 @@ const useNotesStore = create((set) => ({
         currentPage,
         totalPages,
         totalItems,
+        error: null, // Reset error state if successful
       });
     } catch (error) {
       console.error(error);
-      // Handle error display or other actions
+      set({ error: error.message }); // Set error state
     }
   },
 
@@ -60,61 +63,51 @@ const useNotesStore = create((set) => ({
 
       const { notesList, totalItems } = await searchNotes(query);
 
-      // console.warn(notesList)
       set({
         notes: notesList ?? [],
-        totalItems: totalItems,
+        totalItems,
+        error: null, // Reset error state if successful
       });
-      // console.warn(notes)
     } catch (error) {
       console.error(error);
-      // Handle error display or other actions
+      set({ error: error.message }); // Set error state
     }
   },
 
   addNote: async (newNote) => {
     try {
-      // Add note logic
       const addedNote = await addNoteAPI(newNote);
-      await useNotesStore.getState().fetchNotes()
-
-      // set((state) => ({
-      //   notes: [...state.notes, addedNote],
-      //   totalItems: state.totalItems + 1, // Increment totalItems by 1
-      // }));
+      await useNotesStore.getState().fetchNotes();
+      set({ error: null }); // Reset error state if successful
     } catch (error) {
       console.error(error);
-      // Handle error display or other actions
+      set({ error: error.message }); // Set error state
     }
   },
 
   deleteNote: async (noteId) => {
     try {
-      // Delete note logic
       await deleteNoteAPI(noteId);
-      // set((state) => ({
-      //   notes: state.notes.filter((note) => note._id !== noteId),
-      //   totalItems: state.totalItems - 1, // Decrement totalItems by 1
-      // }));
-      await useNotesStore.getState().fetchNotes()
+      await useNotesStore.getState().fetchNotes();
+      set({ error: null }); // Reset error state if successful
     } catch (error) {
       console.error(error);
-      // Handle error display or other actions
+      set({ error: error.message }); // Set error state
     }
   },
 
   updateNote: async (noteId, updatedNote) => {
     try {
-      // Update note logic
       await updateNoteAPI(noteId, updatedNote);
       set((state) => ({
         notes: state.notes.map((note) =>
           note._id === noteId ? { ...note, ...updatedNote } : note
         ),
+        error: null, // Reset error state if successful
       }));
     } catch (error) {
       console.error(error);
-      // Handle error display or other actions
+      set({ error: error.message }); // Set error state
     }
   },
 
@@ -122,15 +115,15 @@ const useNotesStore = create((set) => ({
     try {
       set({ currentPage: page });
       const { notesList, totalPages, totalItems } = await getAllNotes(page);
-      // console.warn(totalItems, totalPages, notesList)
       set({
         notes: notesList,
         totalPages,
         totalItems,
+        error: null, // Reset error state if successful
       });
     } catch (error) {
       console.error(error);
-      // Handle error display or other actions
+      set({ error: error.message }); // Set error state
     }
   },
 }));
