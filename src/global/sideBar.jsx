@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckSquare, faBars, faPlus, faExternalLinkAlt, faArrowLeft, faFont, faSearch, faClose } from '@fortawesome/free-solid-svg-icons';
+import { faCheckSquare, faBars, faPlus, faExternalLinkAlt, faArrowLeft, faFont, faSearch, faClose, faGear, faStickyNote } from '@fortawesome/free-solid-svg-icons';
 import React, { useLayoutEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useSidebarStore from './useSidebarStore';
 
 import { gsap } from 'gsap';
@@ -16,10 +16,13 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
     const [changeThemAndFont, setchangeThemAndFont] = useState('');
     const { setShowSearchInput, showSearchInput } = useNotesStore();
 
+    //! get Refrence of the search bar  
     const searchIconRef = useRef(null);
 
+    //! get the path ........... 
+    const urlPath = useLocation();
 
-    // !custom hook for authentecation 
+    //! custom hook for authentecation 
 
     const { logout } = useAuth();
 
@@ -48,8 +51,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
     // ! log out from account...........
     const handleLogout = () => {
         if (window.confirm('want to logout ?')) {
-            logout()
-            navigate('/register', { replace: true });
+            logout(navigate)
         }
     };
 
@@ -123,12 +125,16 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
     const iconsStyles = 'relative flex items-center justify-center rounded-full w-10 h-10 bg-white bg-opacity-50 text-indigo-900 shadow-md hover:bg-opacity-75  duration-200 ease-in-out cursor-pointer';
 
 
+    function handleNavigation(url) {
 
+        navigate(url, { replace: true })
+
+    }
     return (
         <div
 
             className={`  ${isOpen ? 'h-screen max-sm:col-span-2' : 'fixed h-fit max-sm:mt-2 right-0'
-                } transition-all duration-300 ease-in-out   flex flex-col justify-around rounded-l-lg items-center sm:h-screen bg-gradient-to-b from-indigo-500 to-blue-500  overflow-hidden hover:bg-opacity-75  `}
+                } transition-all duration-300 ease-in-out   flex flex-col justify-around rounded-l-lg items-center sm:h-screen bg-gradient-to-b from-indigo-500 to-blue-500    overflow-y-hidden hover:bg-opacity-75  `}
 
 
         >
@@ -165,13 +171,27 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
                         className="text-indigo-900"
                     />
                 </div>
+                {/* StyickyNote icon : nav to notes page */}
+                <div className={iconsStyles}
+                    onClick={() => handleNavigation('/notes')}
 
-                {/* Check Square icon */}
-                <div className={iconsStyles}>
+                    style={{ backgroundColor: urlPath.pathname == '/notes' ? 'white' : '' }}>
+                    <FontAwesomeIcon
+                        icon={faStickyNote}
+                        size="lg"
+                        className="text-indigo-900"
+                    />
+                </div>
+
+                {/* Check Square icon  nav to tasks page */}
+                <div className={iconsStyles}
+                    onClick={() => handleNavigation('/tasks')}
+                    style={{ backgroundColor: urlPath.pathname == '/tasks' ? 'white' : '' }}>
                     <FontAwesomeIcon
                         icon={faCheckSquare}
                         size="lg"
                         className="text-indigo-900"
+
                     />
                 </div>
                 {/* Plus icon */}
@@ -197,7 +217,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
                 <div
                     onClick={handleSettingsToggle}
                     className={iconsStyles}>
-                    <img src="/assets/icons/settings.svg" alt="settings" />
+                    <FontAwesomeIcon icon={faGear} size='xl' />
                 </div>
 
 
@@ -226,16 +246,7 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
                             <FontAwesomeIcon icon={faExternalLinkAlt} size="lg" className="text-indigo-900" />
                             <h3 className='absolute top-10 text-white'>Logout</h3>
                         </div>
-                        {/* 
-                        Change theme icon
-                        <div className={iconsStyles}
-                            onClick={() => { setchangeThemAndFont('theme') }}
-                        >
-                            Add your implementation for the change theme icon
-                            <FontAwesomeIcon icon={faPalette} size='lg' />
-                        </div> */}
 
-                        {/* Change font type icon */}
                         <div
 
                             onClick={() => { setchangeThemAndFont('font') }}
@@ -248,8 +259,6 @@ const SideBar = ({ setisNewNoteOpen, isNewNoteOpen }) => {
                     </div>
 
                     : changeThemAndFont == 'font' ? <FontSettings /> : ''
-                    // changing theme
-                    //  changeThemAndFont == 'theme' ? <ThemeSelector onSelectTheme={onSelectTheme} /> : ''
 
 
                 }

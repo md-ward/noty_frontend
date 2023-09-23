@@ -1,32 +1,50 @@
-import { useState, useEffect } from "react";
+import { create } from 'zustand';
+import axios from 'axios';
+import REACT_APP_API_URL from '../env';
 
-const useAuth = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        // Check if the user is logged in or not
-        const checkLoggedIn = () => {
-            const token = localStorage.getItem("token");
-            setIsLoggedIn(!!token);
-        };
+const useAuth = create((set) => ({
+    isLoggedIn: !!localStorage.getItem('token'),
+    errorMessage: '',
+    setErrorMessage: (errorMessage) => {
+        set({ errorMessage: errorMessage })
+    },
+    login: async (email, password,navigate) => {
 
-        checkLoggedIn();
-    }, []);
 
-    const login = (token) => {
-        localStorage.setItem("token", token);
-        setIsLoggedIn(true);
-    };
+        try {
+            const response = await axios.post(`${REACT_APP_API_URL}/reg/login`, {
+                email,
+                password,
+            });
 
-    const logout = () => {
+            if (response.status === 200) {
 
+
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('name', response.data.name
+                );
+                set({ isLoggedIn: true });
+                
+                navigate('/notes', { replace: true });
+
+            } else {
+                useAuth.getState().setErrorMessage('Invalid credentials');
+            }
+        } catch (error) {
+            console.error(error);
+            useAuth.getState().setErrorMessage(error.response?.data?.errorMessage || 'An error occurred during login');
+        }
+
+
+    },
+    logout: (navigate) => {
         localStorage.removeItem('token');
         localStorage.removeItem('name');
         localStorage.removeItem('fontFamily');
-        setIsLoggedIn(false);
-    };
-
-    return { isLoggedIn, login, logout };
-};
+        set({ isLoggedIn: false });
+        navigate('/register', { replace: true });
+    },
+}));
 
 export default useAuth;

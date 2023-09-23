@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { gsap } from 'gsap';
-import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
-import REACT_APP_API_URL from '../../../env';
+import useAuth from '../../useAuth';
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm({ setIsLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
   const [togglePassword, setTogglePassword] = useState(true);
 
-  const location = useLocation();
+  const { login, errorMessage, setErrorMessage } = useAuth();
   const navigate = useNavigate();
-
   const handleTogglePassword = () => {
     setTogglePassword(!togglePassword);
   };
@@ -27,26 +24,8 @@ function LoginForm({ setIsLogin }) {
       return;
     }
 
-    try {
-      const response = await axios.post(`${REACT_APP_API_URL}/reg/login`, {
-        email,
-        password,
-      });
-
-      if (response.status === 200) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('name', response.data.name);
-        if (location.pathname === '/') {
-          location.reload();
-        } else {
-          navigate('/', { state: { from: location.pathname }, replace: true });
-        }
-      } else {
-        setErrorMessage('Invalid credentials');
-      }
-    } catch (error) {
-      console.error(error.response?.data?.errorMessage);
-      setErrorMessage(error.response?.data?.errorMessage || 'An error occurred during login');
+    else {
+      login(email, password, navigate)
     }
   };
 

@@ -7,13 +7,16 @@ async function getAllNotes(page = 1, limit = 8) {
   try {
     const userId = localStorage.getItem('token');
     if (!userId) {
-      throw new Error('Unauthorized');
+      throw new ('Unauthorized');
     } else {
-      const response = await axios.get(`${REACT_APP_API_URL}/notes/all_notes/${userId}`, {
+      const response = await axios.get(`${REACT_APP_API_URL}/notes/all_notes/`, {
         params: {
           page,
           limit,
         },
+        headers: {
+          userId: userId
+        }
       });
 
       const notesList = response.data.notes;
@@ -34,11 +37,16 @@ const searchNotes = async (query) => {
   try {
     const userId = localStorage.getItem('token');
 
-    const response = await axios.post(`${REACT_APP_API_URL}/notes/search`, {
-      userId,
-      query,
-    });
 
+    const response = await axios.post(
+      `${REACT_APP_API_URL}/notes/search`,
+      { query },
+      {
+        headers: {
+          userId: userId,
+        },
+      }
+    );
     const notesList = response.data.notes;
     const totalItems = response.data.totalItems;
 
