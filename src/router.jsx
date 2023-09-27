@@ -1,11 +1,12 @@
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import NotesPage from "./notes_component/view/notes_page";
 import Register from "./registering_component/view/registering_page";
 import TasksPage from "./tasks_component/view/tasks_main_page";
+import TeamsPage from "./tasks_component/view/teams_main_page";
 
 const AppRouter = () => {
 
@@ -16,7 +17,7 @@ const AppRouter = () => {
       setTimeout(() => {
         navigate('/register', { replace: true });
       }, 1300);
-    }, []);
+    }, [navigate]);
 
     return (
       <div className="min-h-screen w-full bg-dark-blue flex flex-col justify-center items-center">
@@ -36,6 +37,7 @@ const AppRouter = () => {
         <Route index element={<NotesPage />} />
         <Route path="/notes" element={<NotesPage />} />
         <Route path="/tasks" element={<TasksPage />} />
+        <Route path="/teams" element={<TeamsPage />} />
       </Route>
     </Routes>
   );

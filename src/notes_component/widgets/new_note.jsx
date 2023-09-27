@@ -1,11 +1,11 @@
 import { gsap } from 'gsap';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import { Power3 } from 'gsap/all';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faHashtag, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import useNotesStore from '../stateManagementStores/notesStore';
 
-const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
+const NewNoteDialog = () => {
   const dialogRef = useRef(null);
   const colorsRef = useRef(null);
 
@@ -40,43 +40,8 @@ const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
     tl.play();
   }, []);
 
-  useEffect(() => {
-    if (isNoteUpdate && oldNoteData) {
-      setTitle(oldNoteData.title || '');
-      setText(oldNoteData.text || '');
-      setNoteColor(oldNoteData.noteColor || '#34D399');
-    }
-  }, [isNoteUpdate, oldNoteData]);
 
-  const handleNoteSubmit = async () => {
-    try {
-      const newNote = {
-        userId: localStorage.getItem('token'),
-        title,
-        text,
-        noteColor: noteColor,
 
-      };
-
-      if (isNoteUpdate && oldNoteData) {
-        // Update existing note
-        newNote.id = oldNoteData.id;
-        await updateNote(newNote);
-      } else {
-        // Add new note
-        await addNote(newNote);
-      }
-
-      // Reset the form
-      setTitle('');
-      setText('');
-      setNoteColor('#34D399');
-      setisNewNoteOpen(false);
-    } catch (error) {
-      console.error(error);
-      // Handle error
-    }
-  };
 
 
 
@@ -140,7 +105,7 @@ const NewNoteDialog = ({ setisNewNoteOpen, oldNoteData, isNoteUpdate }) => {
         </span>
         <span
           className="relative flex justify-center items-center"
-          onClick={handleNoteSubmit}
+          onClick={addNote}
         >
           <FontAwesomeIcon
             icon={faCheck}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 
 import { gsap } from 'gsap';
@@ -82,7 +82,7 @@ function SignUpForm({ setIsLogin }) {
             seterrorState('Please enter a valid password :[a-zA-Z0-9]');
 
         }
-    };
+    }
 
 
 

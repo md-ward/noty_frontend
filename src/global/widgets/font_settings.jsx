@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { gsap } from "gsap";
 
@@ -33,8 +33,8 @@ const FontSettings = () => {
 
     const handleFontChange = (fontFamily) => {
 
-    
-            document.body.style.fontFamily = fontFamily;
+
+        document.body.style.fontFamily = fontFamily;
         localStorage.setItem("fontFamily", fontFamily);
     };
     return (

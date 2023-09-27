@@ -1,12 +1,11 @@
-import React, { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faExpand, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import { gsap } from 'gsap';
 import useNotesStore from '../stateManagementStores/notesStore';
 import NoteDialog from './note_dialog';
 
 const NoteCard = ({ note }) => {
-  const { title, text, noteColor, _id, createdAt, tags } = note;
+  const { title, text, noteColor, _id, createdAt } = note;
   const { deleteNote } = useNotesStore();
   const formattedDate = new Date(createdAt).toLocaleString('en-US', {
     year: 'numeric',

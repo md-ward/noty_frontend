@@ -1,28 +1,22 @@
-import SideBar from "../../global/sideBar";
 import MainContent from "./main_content_page";
 import NewNoteDialog from "../widgets/new_note";
-import React, { useState } from 'react';
+import useNotesStore from "../stateManagementStores/notesStore";
+import Layout from "../../global/view/pages_layout";
 
 
 
 const NotesPage = () => {
-  const [isNewNoteOpen, setisNewNoteOpen] = useState(false);
+  const { isNewNoteOpen } = useNotesStore();
   return (
 
-    <div >
+    < >
 
-      <div className="grid grid-cols-12 ">
-
-
-        <MainContent></MainContent>
-        <SideBar setisNewNoteOpen={setisNewNoteOpen} isNewNoteOpen={isNewNoteOpen} />
-      </div>
+      <Layout children={<MainContent />} />
 
 
-
-      {isNewNoteOpen && <NewNoteDialog setisNewNoteOpen={setisNewNoteOpen} isNewNoteOpen={isNewNoteOpen}></NewNoteDialog>
+      {isNewNoteOpen && <NewNoteDialog ></NewNoteDialog>
       }
-    </div>
+    </>
   );
 }
 

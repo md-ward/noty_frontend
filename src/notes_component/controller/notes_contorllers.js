@@ -66,9 +66,12 @@ async function deleteNote(noteId) {
     } else {
       const response = await axios.delete(`${REACT_APP_API_URL}/notes/deleteNote`, {
         data: {
-          userId: userId,
           noteId: noteId,
         },
+        headers: {
+          userid: userId,
+
+        }
       });
 
       const deletedNote = response.data;
@@ -87,7 +90,11 @@ async function addNote(newNote) {
     if (!userId) {
       throw new Error('Unauthorized');
     } else {
-      const response = await axios.post(`${REACT_APP_API_URL}/notes/add_note/`, newNote);
+      const response = await axios.post(`${REACT_APP_API_URL}/notes/add_note/`, newNote, {
+        headers: {
+          userid: userId
+        }
+      });
 
       const addedNote = response.data;
       return addedNote;
@@ -97,7 +104,6 @@ async function addNote(newNote) {
     throw new Error('Error adding note');
   }
 }
-
 // Update an existing note
 async function updateNote(noteId, updatedNote) {
   try {

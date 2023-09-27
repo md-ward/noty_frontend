@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { create } from 'zustand';
 import {
   getAllNotes,
@@ -7,8 +7,14 @@ import {
   updateNote as updateNoteAPI,
   searchNotes,
 } from '../controller/notes_contorllers';
+import useNotificationStore from '../../global/global_stores/notificationStore';
 
 const useNotesStore = create((set) => ({
+  isNewNoteOpen: false,
+  setisNewNoteOpen: (state) => { set({ isNewNoteOpen: state }) },
+
+
+
   // ! Adding a new note ............
   noteColor: '#34D399',
   setNoteColor: (state) => set({ noteColor: state }),
@@ -31,24 +37,25 @@ const useNotesStore = create((set) => ({
   searchQuery: '',
   setSearchQuery: (state) => set({ searchQuery: state }),
 
-  error: null,
-  setError: (error) => set({ error }),
 
   fetchNotes: async () => {
     try {
       const { notesList, currentPage, totalPages, totalItems } = await getAllNotes(
         useNotesStore.getState().currentPage
       );
+
+
       set({
         notes: notesList,
         currentPage,
         totalPages,
         totalItems,
-        error: null, // Reset error state if successful
+        // error: null, // Reset error state if successful
       });
     } catch (error) {
-      console.error(error);
-      set({ error: error.message }); // Set error state
+
+
+      useNotificationStore.getState().addError(error.message)
     }
   },
 
@@ -66,33 +73,63 @@ const useNotesStore = create((set) => ({
       set({
         notes: notesList ?? [],
         totalItems,
-        error: null, // Reset error state if successful
+
       });
     } catch (error) {
-      console.error(error);
-      set({ error: error.message }); // Set error state
+
+      useNotificationStore.getState().addError(error.message)
+
     }
+
+
   },
 
-  addNote: async (newNote) => {
+  addNote: async () => {
     try {
-      const addedNote = await addNoteAPI(newNote);
-      await useNotesStore.getState().fetchNotes();
-      set({ error: null }); // Reset error state if successful
+      const note = {
+        title: useNotesStore.getState().title,
+        text: useNotesStore.getState().text,
+        noteColor: useNotesStore.getState().noteColor,
+      }
+      if (useNotesStore.getState().title === '' || useNotesStore.getState().text == '') {
+
+        throw Error('Add a title and text to submit new note '
+        )
+      }
+
+      else {
+        await addNoteAPI(note);
+        await useNotesStore.getState().fetchNotes();
+
+        // Reset the form
+
+        useNotificationStore.getState().addNotification('note added successfuly');
+        useNotesStore.getState().setTitle('');
+        useNotesStore.getState().setText('');
+        useNotesStore.getState().setNoteColor('#34D399');
+        useNotesStore.getState().setisNewNoteOpen(false);
+      }
+
     } catch (error) {
-      console.error(error);
-      set({ error: error.message }); // Set error state
+
+      useNotificationStore.getState().addError(error.message)
+
     }
+
   },
 
   deleteNote: async (noteId) => {
     try {
       await deleteNoteAPI(noteId);
       await useNotesStore.getState().fetchNotes();
-      set({ error: null }); // Reset error state if successful
+      // set({ error: null }); // Reset error state if successful
+      useNotificationStore.getState().addNotification('note deleted successfuly')
+
     } catch (error) {
-      console.error(error);
-      set({ error: error.message }); // Set error state
+      // console.error(error);
+      // set({ error: error.message }); // Set error state
+      useNotificationStore.getState().addError(error.message)
+
     }
   },
 
@@ -103,11 +140,13 @@ const useNotesStore = create((set) => ({
         notes: state.notes.map((note) =>
           note._id === noteId ? { ...note, ...updatedNote } : note
         ),
-        error: null, // Reset error state if successful
+        // error: null, // Reset error state if successful
       }));
     } catch (error) {
-      console.error(error);
-      set({ error: error.message }); // Set error state
+      // console.error(error);
+      // set({ error: error.message }); // Set error state
+      useNotificationStore.getState().addError(error.message)
+
     }
   },
 
@@ -119,11 +158,13 @@ const useNotesStore = create((set) => ({
         notes: notesList,
         totalPages,
         totalItems,
-        error: null, // Reset error state if successful
+        // error: null, // Reset error state if successful
       });
     } catch (error) {
-      console.error(error);
-      set({ error: error.message }); // Set error state
+      //   console.error(error);
+      //   set({ error: error.message }); // Set error state
+      useNotificationStore.getState().addError(error.message)
+
     }
   },
 }));

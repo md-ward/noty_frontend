@@ -1,4 +1,4 @@
-import React, { useState , useRef, useLayoutEffect } from 'react';
+import  { useState , useRef, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import background from '/assets/background/bg3.jpg';
 import SignUpForm from '../widgets/sign_up_form';
