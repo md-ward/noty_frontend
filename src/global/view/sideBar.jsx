@@ -51,7 +51,7 @@ const SideBar = () => {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [closeSidebar,isOpen,openSidebar]);
+    }, []);
 
     // ! log out from account...........
     const handleLogout = () => {

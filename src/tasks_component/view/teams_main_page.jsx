@@ -1,116 +1,72 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import useSidebarStore from '../../global/global_stores/useSidebarStore';
-import SideBar from '../../global/view/sideBar';
+import Layout from '../../global/view/pages_layout';
+import useCollaborationStore from '../stateManagementStores/useCollaborationStore';
+import TeamsManagement from '../widgets/teams_management';
+import CreateTeamForm from '../widgets/create_team'; // Import the CreateTeamForm component
 
 const TeamsPage = () => {
-  const { isOpen } = useSidebarStore()
-  const [teams, setTeams] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const { selectedOption, setSelectedOption } = useCollaborationStore();
 
-  useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const userId = localStorage.getItem('userId'); // Retrieve the user ID from local storage or the desired location
-
-        if (!userId) {
-          throw new Error('Unauthorized user');
-        }
-
-        const response = await axios.get('/api/teams', {
-          headers: {
-            userid: userId,
-          },
-        });
-
-        setTeams(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error(error);
-        setError('Failed to fetch teams. Please try again.'); // Update the error message accordingly
-        setLoading(false);
-      }
-    };
-
-    fetchTeams();
-  }, []);
-
-  const handleRemoveMember = async (teamId, memberId) => {
-    try {
-      const teamAdminId = localStorage.getItem('teamAdminId'); // Retrieve the team admin ID from local storage or the desired location
-
-      if (!teamAdminId) {
-        throw new Error('Unauthorized user');
-      }
-
-      await axios.delete(`/api/teams/${teamId}/members/${memberId}`, {
-        headers: {
-          userid: teamAdminId,
-        },
-      });
-
-      // Remove the member from the team
-      setTeams((prevTeams) => {
-        return prevTeams.map((team) => {
-          if (team.teamId === teamId) {
-            const updatedMembers = team.members.filter(
-              (member) => member._id !== memberId
-            );
-            return { ...team, members: updatedMembers };
-          }
-          return team;
-        });
-      });
-    } catch (error) {
-      console.error(error);
-      setError('Failed to remove member from the team. Please try again.'); // Update the error message accordingly
-    }
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
   };
 
-  if (loading) {
-    return <div>Loading teams...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
   return (
-
-
-    <>
-
-      <h2>Teams</h2>
-      {
-        teams.length === 0 ? (
-          <div>No teams yet, create one</div>
-        ) : (
-          <ul>
-            {teams.map((team) => (
-              <li key={team.teamId}>
-                <h3>{team.teamName}</h3>
-                <ul>
-                  {team.members.map((member) => (
-                    <li key={member._id}>
-                      {member.name}
-                      <button
-                        onClick={() => handleRemoveMember(team.teamId, member._id)}
-                      >
-                        Remove Member
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        )
-      }
-
-
-    </>
+    <Layout>
+      <div className="grid grid-cols-12 gap-4 h-full">
+        <section className="col-span-10  rounded shadow  p-4">
+          {selectedOption === 'invite' && <InviteManagement />}
+          {selectedOption === 'team' && <TeamsManagement />}
+          {selectedOption === 'createTeam' && <CreateTeamForm />} {/* Render CreateTeamForm when selectedOption is 'createTeam' */}
+        </section>
+        <TeamsItems handleOptionClick={handleOptionClick} />
+      </div>
+    </Layout>
   );
 };
 
 export default TeamsPage;
+
+const TeamsItems = ({ handleOptionClick }) => {
+  return (
+    <section className="col-span-2">
+      <div className="flex flex-col space-y-4 justify-center h-full">
+        <div className="p-4 bg-white rounded shadow">
+          <h3 className="text-lg font-semibold text-center mb-2">Manage Invitations</h3>
+          <button
+            onClick={() => handleOptionClick('invite')}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded px-4 py-2 transition-colors duration-300 mx-auto block"
+          >
+            Manage
+          </button>
+        </div>
+        <div className="p-4 bg-white rounded shadow">
+          <h3 className="text-lg font-semibold text-center mb-2">Manage Teams</h3>
+          <button
+            onClick={() => handleOptionClick('team')}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded px-4 py-2 transition-colors duration-300 mx-auto block"
+          >
+            Manage
+          </button>
+        </div>
+        <div className="p-4 bg-white rounded shadow">
+          <h3 className="text-lg font-semibold text-center mb-2">Create Team</h3>
+          <button
+            onClick={() => handleOptionClick('createTeam')} // Set selectedOption to 'createTeam' when the button is clicked
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded px-4 py-2 transition-colors duration-300 mx-auto block"
+          >
+            Create
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const InviteManagement = () => {
+  return (
+    <div>
+      <h1>Invite Management</h1>
+      {/* Add your invitation management content here */}
+    </div>
+  );
+};

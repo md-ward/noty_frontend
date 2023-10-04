@@ -1,12 +1,13 @@
 import axios from 'axios';
 import REACT_APP_API_URL from '../../../env';
+import { getCookie } from '../../useCookies';
 
 
 // Retrieve all notes with pagination
 async function getAllNotes(page = 1, limit = 8) {
   try {
-    const userId = localStorage.getItem('token');
-    if (!userId) {
+    const token = getCookie('token');
+    if (!token) {
       throw new ('Unauthorized');
     } else {
       const response = await axios.get(`${REACT_APP_API_URL}/notes/all_notes/`, {
@@ -15,7 +16,7 @@ async function getAllNotes(page = 1, limit = 8) {
           limit,
         },
         headers: {
-          userId: userId
+          Authorization: token
         }
       });
 
@@ -35,7 +36,7 @@ async function getAllNotes(page = 1, limit = 8) {
 // Search notes based on a query
 const searchNotes = async (query) => {
   try {
-    const userId = localStorage.getItem('token');
+    const token = getCookie('token');
 
 
     const response = await axios.post(
@@ -43,7 +44,7 @@ const searchNotes = async (query) => {
       { query },
       {
         headers: {
-          userId: userId,
+          Authorization: token,
         },
       }
     );
@@ -52,16 +53,20 @@ const searchNotes = async (query) => {
 
     return { notesList, totalItems };
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     // Handle error
+    throw new Error('something went wrong while searching ...');
+
+
+
   }
 };
 
 // Delete a note
 async function deleteNote(noteId) {
   try {
-    const userId = localStorage.getItem('token');
-    if (!userId) {
+    const token = getCookie('token');
+    if (!token) {
       throw new Error('Unauthorized');
     } else {
       const response = await axios.delete(`${REACT_APP_API_URL}/notes/deleteNote`, {
@@ -69,7 +74,7 @@ async function deleteNote(noteId) {
           noteId: noteId,
         },
         headers: {
-          userid: userId,
+          Authorization: token,
 
         }
       });
@@ -78,7 +83,7 @@ async function deleteNote(noteId) {
       return deletedNote;
     }
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     throw new Error('Error deleting note');
   }
 }
@@ -86,13 +91,13 @@ async function deleteNote(noteId) {
 // Add a new note
 async function addNote(newNote) {
   try {
-    const userId = localStorage.getItem('token');
-    if (!userId) {
+    const token = getCookie('token');
+    if (!token) {
       throw new Error('Unauthorized');
     } else {
       const response = await axios.post(`${REACT_APP_API_URL}/notes/add_note/`, newNote, {
         headers: {
-          userid: userId
+          Authorization: token
         }
       });
 
@@ -107,13 +112,17 @@ async function addNote(newNote) {
 // Update an existing note
 async function updateNote(noteId, updatedNote) {
   try {
-    const userId = localStorage.getItem('token');
-    if (!userId) {
+    const token = getCookie('token');
+    if (!token) {
       throw new Error('Unauthorized');
     } else {
       const response = await axios.put(
         `${REACT_APP_API_URL}/notes/update_note/${noteId}`,
-        updatedNote
+        updatedNote,{
+          headers:{
+            Authorization:token
+          }
+        }
       );
 
       const updatedNoteData = response.data;

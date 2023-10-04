@@ -1,4 +1,4 @@
-import  { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import useTaskStore from '../stateManagementStores/useTaskStore';
 import { gsap } from 'gsap';
 
@@ -58,8 +58,10 @@ const CreateTaskForm = () => {
       onComplete: closeCreateTaskDialog,
     });
   };
+  const currentDate = new Date().toISOString().split('T')[0]; // Get current date in "YYYY-MM-DD" format
 
-  
+
+
   return (
     <div className="re fixed inset-0 flex items-center justify-center z-50">
       <form ref={formRef} onSubmit={handleSubmit} className="relative bg-white p-4 rounded shadow w-96">
@@ -93,8 +95,10 @@ const CreateTaskForm = () => {
           </label>
           <input
             type="date"
+
             id="dueDate"
             value={dueDate}
+            min={currentDate}
             onChange={(e) => setDueDate(e.target.value)}
             className="border border-gray-300 rounded px-3 py-2 w-full"
           />

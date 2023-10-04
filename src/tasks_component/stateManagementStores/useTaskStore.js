@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { fetchTasks, createTask, fetchTeamMembers } from '../controller/taskController';
+import useNotificationStore from '../../global/global_stores/notificationStore';
 
 const useTaskStore = create((set) => ({
     tasks: [],
@@ -17,15 +18,28 @@ const useTaskStore = create((set) => ({
     selectedTeamId: '',
 
     fetchTeamMembers: async () => {
-        const teamsData = await fetchTeamMembers();
-        //todo: consol log teams data .......
-        console.warn('teams', teamsData)
-        set({ teams: teamsData });
+        try {
+            const teamsData = await fetchTeamMembers();
+            //todo: consol log teams data .......
+            set({ teams: teamsData });
+
+        } catch (error) {
+            useNotificationStore.getState().addError(error)
+        }
     },
 
     fetchTasks: async () => {
-        const fetchedTasks = await fetchTasks();
-        set({ tasks: fetchedTasks });
+        try {
+            const fetchedTasks = await fetchTasks();
+
+            set({ tasks: fetchedTasks });
+            console.warn(useTaskStore.getState().tasks)
+        } catch (error) {
+            console.warn(error)
+            useNotificationStore.getState().addError(error)
+
+
+        }
     },
 
     setCurrentTask: (taskId) => {
@@ -74,10 +88,13 @@ const useTaskStore = create((set) => ({
                 dueDate: '',
                 assignedTo: '',
                 teamId: '',
+                isDialogOpen: false
             }));
             // Reset form or perform any other actions
         } catch (error) {
-            console.error('Error creating task:', error);
+            // console.error('Error creating task:', error);
+            useNotificationStore.getState().addError(error)
+
         }
     },
 }));

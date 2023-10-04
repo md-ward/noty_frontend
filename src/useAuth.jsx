@@ -1,15 +1,18 @@
 import { create } from 'zustand';
 import axios from 'axios';
 import REACT_APP_API_URL from '../env';
+import { getCookie, removeCookie, setCookie } from './useCookies';
+import useNotificationStore from './global/global_stores/notificationStore'
+import socketManager from './socketManager';
 
 
 const useAuth = create((set) => ({
-    isLoggedIn: !!localStorage.getItem('token'),
+    isLoggedIn: getCookie('token'),
     errorMessage: '',
     setErrorMessage: (errorMessage) => {
         set({ errorMessage: errorMessage })
     },
-    login: async (email, password,navigate) => {
+    login: async (email, password, navigate) => {
 
 
         try {
@@ -21,13 +24,14 @@ const useAuth = create((set) => ({
             if (response.status === 200) {
 
 
-                localStorage.setItem('token', response.data.token);
-                localStorage.setItem('name', response.data.name
-                );
+                setCookie('token', response.data.token);
+                setCookie('name', response.data.name);
                 set({ isLoggedIn: true });
-                
-                navigate('/notes', { replace: true });
 
+                navigate('/notes', { replace: true });
+                useNotificationStore.getState().addNotification(`wellcom back ${response.data.name}`)
+
+            
             } else {
                 useAuth.getState().setErrorMessage('Invalid credentials');
             }
@@ -39,11 +43,11 @@ const useAuth = create((set) => ({
 
     },
     logout: (navigate) => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('name');
-        localStorage.removeItem('fontFamily');
+        removeCookie()
         set({ isLoggedIn: false });
+        socketManager.disconnect()
         navigate('/register', { replace: true });
+
     },
 }));
 

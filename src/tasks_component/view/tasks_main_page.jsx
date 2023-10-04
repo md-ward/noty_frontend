@@ -1,15 +1,23 @@
 import { useEffect } from 'react';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import listPlugin from '@fullcalendar/list';
+
 import FullCalendar from '@fullcalendar/react';
 import EventCard from '../widgets/event_content_card';
 import useTaskStore from '../stateManagementStores/useTaskStore';
 import CreateTaskForm from '../widgets/create_task';
-import useSidebarStore from '../../global/global_stores/useSidebarStore';
-import Layout from "../../global/view/pages_layout";
+import Layout from '../../global/view/pages_layout';
 
 const TasksPage = () => {
-    const { tasks, currentTask, isDialogOpen, fetchTasks, setCurrentTask, openDialog, isCreateTaskDialogOpen } = useTaskStore();
-    const isOpen = useSidebarStore((state) => state.isOpen);
+    const {
+        tasks,
+        currentTask,
+        isDialogOpen,
+        fetchTasks,
+        setCurrentTask,
+        openDialog,
+        isCreateTaskDialogOpen,
+    } = useTaskStore();
 
     useEffect(() => {
         fetchTasks();
@@ -17,35 +25,43 @@ const TasksPage = () => {
 
     const handleEventClick = (eventInfo) => {
         setCurrentTask(eventInfo.event.id);
-        openDialog();
+        openDialog()
     };
-
 
     return (
         <>
+            <Layout
+                children={
+                    <FullCalendar
+                   
+                        plugins={[dayGridPlugin, listPlugin]}
+                        initialView="dayGridMonth"
+                        weekends={true}
+                        events={tasks.map((task) => ({
+                            id: task._id,
+                            title: task.title,
+                            start: task.createdAt,
+                            end: task.dueDate,
+                            classNames: ['cursor-pointer'],
+                        }))}
+                        eventClick={handleEventClick}
+                        headerToolbar={{
 
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'dayGridMonth,listMonth',
+                        }}
 
-            <Layout children={<FullCalendar
-                plugins={[dayGridPlugin]}
-                initialView="dayGridMonth"
-                weekends={true}
-
-                events={tasks.map((task) => ({
-                    id: task._id,
-                    title: task.title,
-                    date: task.dueDate,
-                }))}
-                eventClick={handleEventClick}
-            />
-            }
+                        buttonText={{
+                            today: 'Today',
+                            dayGridMonth: 'Month',
+                            listMonth: 'List',
+                        }}
+                    />
+                }
             />
             {isDialogOpen && <EventCard task={currentTask} />}
-            {
-                isCreateTaskDialogOpen && <CreateTaskForm />
-            }
-
-
-
+            {isCreateTaskDialogOpen && <CreateTaskForm />}
         </>
     );
 };

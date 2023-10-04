@@ -20,7 +20,7 @@ const AppRouter = () => {
     }, [navigate]);
 
     return (
-      <div className="min-h-screen w-full bg-dark-blue flex flex-col justify-center items-center">
+      <div className="min-h-screen w-full bg-gradient-to-b from-indigo-500 to-blue-500 flex flex-col justify-center items-center">
         <FontAwesomeIcon icon={faWarning} className="text-white" size="9x" />
         <h1 className="text-white text-lg">Error page not found 404</h1>
         <h2 className="text-white text-lg">Redirecting......</h2>

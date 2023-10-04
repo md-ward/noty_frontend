@@ -28,7 +28,7 @@ const NotificationContainer = () => {
   }, [notifications]);
 
   useEffect(() => {
-    if (errors.length === 1) {
+    if (errors.length > 0) {
       const error = errors[0];
       const errorId = `#error-${error.id}`;
 

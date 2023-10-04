@@ -43,11 +43,11 @@ function LoginForm({ setIsLogin }) {
   };
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-lg mx-auto w-96 h-1/2 my-auto z-30" id="login-form">
+    <div className="bg-white  rounded-xl p-4 shadow-lg " id="login-form">
       <h1 className="text-3xl mb-4 text-center text-dark-blue font-serif">Login</h1>
       <form onSubmit={handleLogin} className="flex flex-col">
         <div className="mb-6 space-y-2">
-          <label htmlFor="email" className="block text-sm font-bold leading-5 text-gray-700">
+          <label htmlFor="email" className="block text-sm font-bold leading-5 text-blue-600">
             Email
           </label>
           <input
@@ -60,7 +60,7 @@ function LoginForm({ setIsLogin }) {
         </div>
 
         <div className="mb-6 space-y-2">
-          <label htmlFor="password" className="block text-sm font-bold leading-5 text-gray-700">
+          <label htmlFor="password" className="block text-sm font-bold leading-5 text-blue-600">
             Password
           </label>
           <span className="relative flex justify-end items-center">
