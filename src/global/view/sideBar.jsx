@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare, faBars, faPlus, faExternalLinkAlt, faArrowLeft, faFont, faSearch, faClose, faGear, faStickyNote, faUserGroup } from '@fortawesome/free-solid-svg-icons';
-import  { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useSidebarStore from '../global_stores/useSidebarStore';
 
@@ -189,7 +189,9 @@ const SideBar = () => {
             >
 
                 {/* Search/Teams icon */}
-                <div className={iconsStyles} onClick={() => handleSearchToggleAndNavToTeam(urlPath.pathname)} ref={searchIconRef}>
+                <div className={iconsStyles}
+                    style={{ display: urlPath.pathname == '/teams' ? 'none' : '' }}
+                    onClick={() => handleSearchToggleAndNavToTeam(urlPath.pathname)} ref={searchIconRef}>
                     <FontAwesomeIcon
                         icon={urlPath.pathname === '/tasks' ? faUserGroup : (!showSearchInput ? faSearch : faClose)}
                         size="lg"

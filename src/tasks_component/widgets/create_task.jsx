@@ -61,7 +61,6 @@ const CreateTaskForm = () => {
   const currentDate = new Date().toISOString().split('T')[0]; // Get current date in "YYYY-MM-DD" format
 
 
-
   return (
     <div className="re fixed inset-0 flex items-center justify-center z-50">
       <form ref={formRef} onSubmit={handleSubmit} className="relative bg-white p-4 rounded shadow w-96">
@@ -107,7 +106,7 @@ const CreateTaskForm = () => {
           <label htmlFor="team" className="block text-sm font-medium text-gray-700">
             Team
           </label>
-          <select
+          {teams.length > 0 ? <select
             id="team"
             onChange={handleTeamChange}
             className="border border-gray-300 rounded px-3 py-2 w-full"
@@ -119,6 +118,13 @@ const CreateTaskForm = () => {
               </option>
             ))}
           </select>
+
+            : <h1 className="border border-gray-300 text-red-500 rounded px-3 py-2 w-full"
+            >
+              No teams found,create a team first
+
+            </h1>
+          }
         </div>
         {teamName && (
           <div className="mb-4">
