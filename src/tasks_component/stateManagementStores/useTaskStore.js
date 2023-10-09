@@ -16,26 +16,33 @@ const useTaskStore = create((set) => ({
     teamMembers: [],
     selectedTeamMember: '',
     selectedTeamId: '',
-
+    isloading: false,
     fetchTeamMembers: async () => {
         try {
+            set({ isloading: true })
+
             const teamsData = await fetchTeamMembers();
             //todo: consol log teams data .......
-            set({ teams: teamsData });
+            set({ teams: teamsData, isloading: false });
 
         } catch (error) {
+            set({ isloading: false })
             useNotificationStore.getState().addError(error)
+
         }
     },
 
     fetchTasks: async () => {
         try {
+            set({ isloading: true })
             const fetchedTasks = await fetchTasks();
 
             set({ tasks: fetchedTasks });
-            console.warn(useTaskStore.getState().tasks)
+            set({ isloading: false })
+
         } catch (error) {
-            console.warn(error)
+            set({ isloading: false })
+
             useNotificationStore.getState().addError(error)
 
 
@@ -80,23 +87,30 @@ const useTaskStore = create((set) => ({
         const { title, description, dueDate, selectedTeamMember, selectedTeamId } = useTaskStore.getState();
         const taskData = { title, description, dueDate, assignedTo: selectedTeamMember, teamId: selectedTeamId };
         try {
-            const createdTask = await createTask(taskData);
-            set((state) => ({
-                tasks: [...state.tasks, createdTask],
-                title: '',
-                description: '',
-                dueDate: '',
-                assignedTo: '',
-                teamId: '',
-                isDialogOpen: false
-            }));
+            await createTask(taskData);
+
             // Reset form or perform any other actions
+
         } catch (error) {
-            // console.error('Error creating task:', error);
-            useNotificationStore.getState().addError(error)
+            console.error('Error creating task:', error);
+            useNotificationStore.getState().addError('error in creating the task ')
 
         }
     },
+
+    resetTasks: (createdTask) => {
+
+        set((state) => ({
+            tasks: [...state.tasks, createdTask],
+            title: '',
+            description: '',
+            dueDate: '',
+            assignedTo: '',
+            teamId: '',
+            isCreateTaskDialogOpen: false
+        }));
+    }
+
 }));
 
 export default useTaskStore;

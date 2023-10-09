@@ -7,6 +7,8 @@ import EventCard from '../widgets/event_content_card';
 import useTaskStore from '../stateManagementStores/useTaskStore';
 import CreateTaskForm from '../widgets/create_task';
 import Layout from '../../global/view/pages_layout';
+import Loader from '../../global/widgets/loader'
+
 
 const TasksPage = () => {
     const {
@@ -17,6 +19,7 @@ const TasksPage = () => {
         setCurrentTask,
         openDialog,
         isCreateTaskDialogOpen,
+        isloading
     } = useTaskStore();
 
     useEffect(() => {
@@ -31,33 +34,39 @@ const TasksPage = () => {
     return (
         <>
             <Layout
+
                 children={
-                    <FullCalendar
-                   
-                        plugins={[dayGridPlugin, listPlugin]}
-                        initialView="dayGridMonth"
-                        weekends={true}
-                        events={tasks.map((task) => ({
-                            id: task._id,
-                            title: task.title,
-                            start: task.createdAt,
-                            end: task.dueDate,
-                            classNames: ['cursor-pointer'],
-                        }))}
-                        eventClick={handleEventClick}
-                        headerToolbar={{
 
-                            left: 'prev,next today',
-                            center: 'title',
-                            right: 'dayGridMonth,listMonth',
-                        }}
+                    <>
+                        {isloading && <Loader />}
+                        <FullCalendar
 
-                        buttonText={{
-                            today: 'Today',
-                            dayGridMonth: 'Month',
-                            listMonth: 'List',
-                        }}
-                    />
+                            plugins={[dayGridPlugin, listPlugin]}
+                            initialView="dayGridMonth"
+                            weekends={true}
+                            events={tasks.map((task) => ({
+                                id: task._id,
+                                title: task.title,
+                                start: task.createdAt,
+                                end: task.dueDate,
+                                classNames: ['cursor-pointer'],
+                            }))}
+                            eventClick={handleEventClick}
+                            headerToolbar={{
+
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'dayGridMonth,listMonth',
+                            }}
+
+                            buttonText={{
+                                today: 'Today',
+                                dayGridMonth: 'Month',
+                                listMonth: 'List',
+                            }}
+                        />
+                    </>
+
                 }
             />
             {isDialogOpen && <EventCard task={currentTask} />}

@@ -1,21 +1,22 @@
 import { Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
-import NotesPage from "./notes_component/view/notes_page";
-import Register from "./registering_component/view/registering_page";
-import TasksPage from "./tasks_component/view/tasks_main_page";
-import TeamsPage from "./tasks_component/view/teams_main_page";
+import Loader from "./global/widgets/loader";
+import Register from "./registering_component/view/registering_page"
+
+const NotesPage = lazy(() => import("./notes_component/view/notes_page"));
+const TasksPage = lazy(() => import("./tasks_component/view/tasks_main_page"));
+const TeamsPage = lazy(() => import("./tasks_component/view/teams_main_page"));
 
 const AppRouter = () => {
-
   const ErrorPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
       setTimeout(() => {
-        navigate('/register', { replace: true });
+        navigate('/', { replace: true });
       }, 1300);
     }, [navigate]);
 
@@ -33,18 +34,17 @@ const AppRouter = () => {
       <Route path="/register" element={<Register />} />
       <Route path="*" element={<ErrorPage />} />
 
-      <Route element={<ProtectedRoute />} >
-        <Route index element={<NotesPage />} />
-        <Route path="/notes" element={<NotesPage />} />
-        <Route path="/tasks" element={<TasksPage />} />
-        <Route path="/teams" element={<TeamsPage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route index element={<Suspense fallback={<div>Loading...</div>}><NotesPage /></Suspense>} />
+        <Route path="/notes" element={<Suspense fallback={<Loader />}><NotesPage /></Suspense>} />
+        <Route path="/tasks" element={<Suspense fallback={<Loader />}><TasksPage /></Suspense>} />
+        <Route path="/teams" element={<Suspense fallback={<Loader />}><TeamsPage /></Suspense>} />
       </Route>
     </Routes>
   );
 };
 
 export default AppRouter;
-
 const ProtectedRoute = () => {
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const ProtectedRoute = () => {
     if (!isLoggedIn) {
       navigate('/register', { replace: true });
     }
-  }, [isLoggedIn, navigate]);
+  }, []);
 
   return isLoggedIn ? <Outlet /> : null;
 };

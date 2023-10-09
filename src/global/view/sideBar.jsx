@@ -10,6 +10,7 @@ import FontSettings from '../widgets/font_settings';
 import useAuth from '../../useAuth';
 import useNotesStore from '../../notes_component/stateManagementStores/notesStore';
 import useTaskStore from '../../tasks_component/stateManagementStores/useTaskStore';
+import useCollaborationStore from '../../tasks_component/stateManagementStores/useCollaborationStore';
 const SideBar = () => {
 
 
@@ -18,6 +19,7 @@ const SideBar = () => {
     const [changeThemAndFont, setchangeThemAndFont] = useState('');
     const { setShowSearchInput, showSearchInput, isNewNoteOpen, setisNewNoteOpen } = useNotesStore();
 
+    const { settoggleTeamForm } = useCollaborationStore()
     const { openCreateTaskDialog } = useTaskStore();
 
 
@@ -148,13 +150,32 @@ const SideBar = () => {
             setisNewNoteOpen(!isNewNoteOpen)
 
         }
-        else {
+        if (urlPath.pathname == '/teams') {
+
+            settoggleTeamForm(true)
+        }
+        if (urlPath.pathname == '/tasks') {
 
             openCreateTaskDialog()
 
         }
     }
 
+    function handleToolTip(pathname) {
+
+        switch (pathname) {
+            case '/':
+            case '/notes':
+                return 'Add note'
+
+            case '/tasks':
+                return 'Add task'
+
+            case '/teams':
+                return 'Create Team'
+        }
+
+    }
 
     // ! buttons style 
     const iconsStyles = 'relative flex items-center justify-center rounded-full w-10 h-10 bg-white bg-opacity-50 text-indigo-900 shadow-md hover:bg-opacity-75  duration-200 ease-in-out cursor-pointer';
@@ -189,7 +210,9 @@ const SideBar = () => {
             >
 
                 {/* Search/Teams icon */}
-                <div className={iconsStyles}
+                <div
+                    title=' Notes Search'
+                    className={iconsStyles}
                     style={{ display: urlPath.pathname == '/teams' ? 'none' : '' }}
                     onClick={() => handleSearchToggleAndNavToTeam(urlPath.pathname)} ref={searchIconRef}>
                     <FontAwesomeIcon
@@ -200,6 +223,7 @@ const SideBar = () => {
                 </div>
                 {/* StyickyNote icon: nav to notes page */}
                 <div
+                    title='Notes'
                     className={iconsStyles}
                     onClick={() => handleNavigation('/notes')}
                     style={{ backgroundColor: (urlPath.pathname === '/notes' || urlPath.pathname === '/') ? 'white' : '' }}
@@ -208,6 +232,7 @@ const SideBar = () => {
                 </div>
                 {/* Check Square icon: nav to tasks page */}
                 <div
+                    title='Tasks'
                     className={iconsStyles}
                     onClick={() => handleNavigation('/tasks')}
                     style={{ backgroundColor: urlPath.pathname === '/tasks' ? 'white' : '' }}
@@ -215,7 +240,7 @@ const SideBar = () => {
                     <FontAwesomeIcon icon={faCheckSquare} size="lg" className="text-indigo-900" />
                 </div>
                 {/* Plus icon */}
-                <div onClick={handleCreateNoteOrTask} className={iconsStyles}>
+                <div onClick={handleCreateNoteOrTask} title={handleToolTip(urlPath.pathname)} className={iconsStyles}>
                     <FontAwesomeIcon
                         icon={faPlus}
                         size="lg"
@@ -223,13 +248,16 @@ const SideBar = () => {
                     />
                 </div>
                 {/* External Link/Settings icon */}
-                <div onClick={handleSettingsToggle} className={iconsStyles}>
+                <div
+                    title='Settings'
+                    onClick={handleSettingsToggle} className={iconsStyles}>
                     <FontAwesomeIcon icon={faGear} size="xl" />
                 </div>
             </div>
 
             {/* settings menue itmes */}
             <div
+
                 className={`flex flex-col justify-around h-full  ${(handleSettingChange && isOpen) ? 'sm:flex' : 'hidden'
                     }`}
                 id="new_items"

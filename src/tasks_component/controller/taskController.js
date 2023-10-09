@@ -31,19 +31,42 @@ export const createTask = async (taskData) => {
 
   try {
     const socket = socketManager.getInstance();
-    const userId = socket.userId;
-    const task = { ...taskData, userId };
+
 
     socket.emit('task_action', {
       action: 'create',
-      taskData: task,
+      taskData: taskData,
     });
 
-    return task;
   } catch (error) {
     throw new Error('Error creating task');
   }
 };
+
+
+export const deleteTask = async (taskId) => {
+  const token = getCookie('token');
+  if (!token) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    const socket = socketManager.getInstance();
+
+
+    socket.emit('task_action', {
+      action: 'delete',
+      taskId: taskId,
+    });
+
+  } catch (error) {
+    throw new Error('Error Deleting task');
+  }
+};
+
+
+
+
 export const fetchTeamMembers = async () => {
   const token = getCookie('token');
   if (!token) {

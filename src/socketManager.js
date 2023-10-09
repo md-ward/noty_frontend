@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
 import { getCookie } from "./useCookies";
 import useNotificationStore from "./global/global_stores/notificationStore";
+import useTaskStore from "./tasks_component/stateManagementStores/useTaskStore";
 
 
 class SocketManager {
@@ -28,6 +29,7 @@ class SocketManager {
           this.socket.on("task_created", (taskData) => {
             console.log("Task created:", taskData);
             useNotificationStore.getState().addNotification('new task added ')
+            useTaskStore.getState().resetTasks(taskData)
             // Perform any necessary actions or update the UI
           });
 
@@ -36,6 +38,14 @@ class SocketManager {
             console.log("Task updated:", taskData);
             // Perform any necessary actions or update the UI
           });
+
+
+          this.socket.on("task_deleted", (taskId) => {
+            // Perform any necessary actions or update the UI
+            useNotificationStore.getState().addNotification(`Task with id  ${taskId} has been deleted `)
+
+          });
+
 
           // ... Add more event handlers for other events as needed
 

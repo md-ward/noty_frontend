@@ -5,6 +5,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import REACT_APP_API_URL from '../../../env';
+import { setCookie } from '../../useCookies';
 
 function SignUpForm({ setIsLogin }) {
     const navigate = useNavigate();
@@ -55,9 +56,9 @@ function SignUpForm({ setIsLogin }) {
                 });
 
                 console.log(response);
-                localStorage.setItem('token', response.data['token']);
-                localStorage.setItem('name', response.data['name']);
-                navigate('/', { replace: true });
+                setCookie('token', response.data['token']);
+                setCookie('name', response.data['name']);
+                navigate('/notes', { replace: true });
             } catch (error) {
                 seterrorState(error.response.data.errorMessage);
             }

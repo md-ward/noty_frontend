@@ -67,10 +67,10 @@ const NoteCard = ({ note }) => {
             {showMenu && (
               <div className="absolute right-0 mt-2 bg-white rounded-lg shadow-lg">
                 <div className="flex flex-col p-2">
-                  <div className="flex items-center gap-2 px-2 py-1 cursor-pointer hover:bg-gray-200">
+                  {/* <div className="flex items-center gap-2 px-2 py-1 cursor-pointer hover:bg-gray-200">
                     <FontAwesomeIcon icon={faExpand} className="text-gray-600" />
                     <span>Update</span>
-                  </div>
+                  </div> */}
                   <div className="flex items-center gap-2 px-2 py-1 cursor-pointer hover:bg-gray-200" onClick={handleDeleteNote}>
                     <FontAwesomeIcon icon={faTrash} className="text-gray-600" />
                     <span>Delete</span>

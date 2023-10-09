@@ -18,7 +18,6 @@ const TeamsPage = () => {
         <section className="col-span-12  row-span-5 rounded shadow p-4">
           {selectedOption === 'invite' && <InviteManagement />}
           {selectedOption === 'team' && <TeamsManagement />}
-          {selectedOption === 'createTeam' && <CreateTeamForm />}
         </section>
         <TeamsItems handleOptionClick={handleOptionClick} selectedOption={selectedOption} />
       </div>
@@ -43,12 +42,7 @@ const TeamsItems = ({ handleOptionClick, selectedOption }) => {
       >
         Manage Teams
       </button>
-      <button
-        onClick={() => handleOptionClick('createTeam')}
-        className={`p-4 ${selectedOption === 'createTeam' ? 'text-blue-500' : 'text-gray-500'}`}
-      >
-        Create Team
-      </button>
+      
     </section>
   );
 };

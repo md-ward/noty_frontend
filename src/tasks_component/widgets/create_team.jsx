@@ -3,7 +3,7 @@ import { gsap } from 'gsap';
 import useCollaborationStore from '../stateManagementStores/useCollaborationStore';
 
 const CreateTeamForm = () => {
-  const { setSelectedOption, teamName, setTeamName, createTeam } = useCollaborationStore();
+  const { teamName, setTeamName, createTeam, settoggleTeamForm } = useCollaborationStore();
 
   const formRef = useRef(null);
 
@@ -22,7 +22,7 @@ const CreateTeamForm = () => {
       duration: 0.3,
       ease: 'power2.in',
       onComplete: () => {
-        setSelectedOption(null);
+        settoggleTeamForm(false);
       },
     });
   };
